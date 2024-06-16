@@ -40,3 +40,45 @@ vscode_extensions:
   - akamud.vscode-theme-onelight
   - tgreen7.one-monokai-dark
   - jprestidge.theme-material-theme
+
+# Firefox policies. Documented here:
+# https://github.com/mozilla/policy-templates/blob/master/README.md
+firefox_policies:
+  # Set (and lock) the homepage to the given url
+  # Homepage:
+  #   URL: "http://contest"
+  #   Locked: true
+  #   StartPage: homepage-locked
+  # Add some bookmark entries (and always show the bookmarks toolbar)
+  DisplayBookmarksToolbar: always
+  Bookmarks:
+    - Title: Algoforum
+      URL: "https://algoforum.upatras.gr/"
+      Placement: "toolbar"
+    - Title: ChatGPT
+      URL: "https://chat.openai.com/"
+      Placement: "toolbar"
+
+firefox_default_policies:
+  # Prevent updating (shouldn't happen on linux, but we want to avoid it anyway)
+  DisableAppUpdate: true
+  # What it says on the tin. This is to prevent a banner on first start about what it's sharing
+  DisableTelemetry: true
+
+  # Disable a bunch of random features we don't need
+  DisablePocket: true
+  DisableFirefoxStudies: true
+  DisableFirefoxAccounts: true
+  DisableFeedbackCommands: true
+  NewTabPage: false
+  NoDefaultBookmarks: true
+
+  # Disable a bunch of messages
+  UserMessaging:
+    WhatsNew: false
+    ExtensionRecommendations: false
+    FeatureRecommendations: false
+    UrlbarInterventions: false
+    SkipOnboard: true
+    MoreFromMozilla: false
+    Locked: true
