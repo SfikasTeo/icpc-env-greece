@@ -52,11 +52,8 @@ firefox_policies:
   # Add some bookmark entries (and always show the bookmarks toolbar)
   DisplayBookmarksToolbar: always
   Bookmarks:
-    - Title: Algoforum
-      URL: "https://algoforum.upatras.gr/"
-      Placement: "toolbar"
-    - Title: ChatGPT
-      URL: "https://chat.openai.com/"
+    - Title: Programming Docs
+      URL: "file:///opt/localwww/index.html"
       Placement: "toolbar"
 
 firefox_default_policies:
