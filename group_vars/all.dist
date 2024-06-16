@@ -42,7 +42,7 @@ vscode_extensions:
   - jprestidge.theme-material-theme
 
 # Firefox policies. Documented here:
-# https://github.com/mozilla/policy-templates/blob/master/README.md
+# https://mozilla.github.io/policy-templates/
 firefox_policies:
   # Set (and lock) the homepage to the given url
   # Homepage:
@@ -72,6 +72,7 @@ firefox_default_policies:
   DisableFeedbackCommands: true
   NewTabPage: false
   NoDefaultBookmarks: true
+  DisableProfileImport: true
 
   # Disable a bunch of messages
   UserMessaging:
