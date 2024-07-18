@@ -42,7 +42,7 @@ vscode_extensions:
   - jprestidge.theme-material-theme
 
 # Firefox policies. Documented here:
-# https://github.com/mozilla/policy-templates/blob/master/README.md
+# https://mozilla.github.io/policy-templates/
 firefox_policies:
   # Set (and lock) the homepage to the given url
   # Homepage:
@@ -52,11 +52,8 @@ firefox_policies:
   # Add some bookmark entries (and always show the bookmarks toolbar)
   DisplayBookmarksToolbar: always
   Bookmarks:
-    - Title: Algoforum
-      URL: "https://algoforum.upatras.gr/"
-      Placement: "toolbar"
-    - Title: ChatGPT
-      URL: "https://chat.openai.com/"
+    - Title: Programming Docs
+      URL: "file:///opt/localwww/index.html"
       Placement: "toolbar"
 
 firefox_default_policies:
@@ -72,6 +69,7 @@ firefox_default_policies:
   DisableFeedbackCommands: true
   NewTabPage: false
   NoDefaultBookmarks: true
+  DisableProfileImport: true
 
   # Disable a bunch of messages
   UserMessaging:
