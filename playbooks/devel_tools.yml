@@ -6,34 +6,6 @@
         - vim       
         - gedit     # Simple gnome text editor w/ syntax highlighting
 
-  - name: install codeblocks
-    when: "'codeblocks' in devtools"
-    apt:
-      state: present
-      pkg:
-        - codeblocks
-        - codeblocks-contrib
-
   - name: install vscode
     when: "'vscode' in devtools"
-    include_tasks: 'devel_tools/vscode.yaml'
-
-  - name: install netbeans
-    when: "'netbeans' in devtools"
-    include_tasks: 'devel_tools/netbeans.yaml'
-
-  - name: install geany
-    when: "'geany' in devtools"
-    apt:
-      state: present
-      pkg:
-        - geany
-        - geany-plugins
-
-  - include_tasks: 'devel_tools/eclipse.yaml'
-    when: "'eclipse' in devtools"
-
-  - include_tasks: 'devel_tools/intellij.yaml'
-    when: ('intellij-idea' in devtools) or ('intellij-clion' in devtools) or ('intellij-pycharm' in devtools)
-
-  
+    include_tasks: 'devel_tools/vscode.yml'

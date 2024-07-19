@@ -1,6 +1,0 @@
----
-- name: rust
-  apt:
-    state: present
-    pkg:
-      - rustc

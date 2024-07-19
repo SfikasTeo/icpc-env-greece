@@ -1,6 +1,0 @@
----
-- name: Objective-C (~25mb)
-  apt:
-    state: present
-    pkg:
-      - gobjc

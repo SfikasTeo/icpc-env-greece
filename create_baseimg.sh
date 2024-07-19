@@ -42,9 +42,9 @@ while [[ $# -ge 1 ]]; do
 done
 
 # Default image size 14700M(fits on an 16G flash drive)
-# IMGSIZE=${IMGSIZE:-14700M}
+IMGSIZE=${IMGSIZE:-14700M}
 # Default image size 28500M(fits on an 32G flash drive)
-IMGSIZE=${IMGSIZE:-28500M} # 32G B file by default -- If you want to buy 64G flash drives this must change.
+# IMGSIZE=${IMGSIZE:-28500M} # 32G B file by default -- If you want to buy 64G flash drives this must change.
 
 # Leave this as it is probably
 function create_unattended_iso(){
@@ -55,7 +55,7 @@ function create_unattended_iso(){
   # Extract the efi partition out of the iso
   # Extract the efi partition out of the iso
   read -a EFI_PARTITION < <(parted -m $ISO unit b print | awk -F: '$1 == "2" { print $2,$3,$4}' | tr -d 'B')
-  sudo dd if=$ISO of=$TMPDIR/efi.img skip=${EFI_PARTITION[0]} bs=1 count=${EFI_PARTITION[2]} ; sync
+  dd if=$ISO of=$TMPDIR/efi.img skip=${EFI_PARTITION[0]} bs=1 count=${EFI_PARTITION[2]} ; sync
   # # this is basically /usr/lib/grub/i386-pc/boot_hybrid.img from grub-pc-bin package (we just skip the end bits which xorriso will recreate)
   echo "1"
   dd if=$ISO of=$TMPDIR/mbr.img bs=1 count=1 ; sync

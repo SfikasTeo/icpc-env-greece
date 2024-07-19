@@ -1,12 +1,13 @@
-server_names_hash_bucket_size 128;
-resolver 8.8.8.8 ipv6=off;
-
 server {
-  listen 80 default_server;
-  listen 443 ssl default_server;
-  server_name _;
-  ssl_certificate /etc/ssl/reverseproxy.cert;
-  ssl_certificate_key /etc/ssl/reverseproxy.key;
+    listen 80;
+    server_name localhost;
 
-  root /opt/localwww;
+    location / {
+        if ($http_Authorization = "Bearer {{ auth_token }}") {
+            proxy_pass http://{{ domserver_ip_address }};
+        }
+        if ($http_authorization != "Bearer {{ auth_token }}") {
+            return 401;
+        }
+    }
 }

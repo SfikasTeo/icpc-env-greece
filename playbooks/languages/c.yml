@@ -1,8 +1,0 @@
----
-- name: C Language
-  apt:
-    state: present
-    pkg:
-      - gcc
-      - gdb
-    

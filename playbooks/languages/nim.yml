@@ -1,6 +1,0 @@
----
-- name: Nim (~12mb)
-  apt:
-    state: present
-    pkg:
-      - nim

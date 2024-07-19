@@ -7,34 +7,10 @@ icpc_timezone: 'Europe/Athens'
 # That has access to the contest server.
 icpcadmin_pass: icpcadmin
 
-#This is fine as long as we understand how the languages are beeing set up.
-# Check the java version that is beeing downloaded
-languages:
-  - c
-  - cpp
-  - java
-  - python3
-
 devtools:
-  - codeblocks
-  - geany
   - vscode
-  - intellij-idea
-  - intellij-pycharm
-  - netbeans
 
 vscode_extensions:
-  # C/C++
-  - ms-vscode.cpptools-extension-pack
-  # Python
-  - ms-python.python
-  - kevinrose.vsc-python-indent
-  - visualstudioexptteam.vscodeintellicode
-  # Java
-  - vscjava.vscode-java-pack
-  # Misc
-  - vscodevim.vim
-  - lfs.vscode-emacs-friendly
   # Themes
   - akamud.vscode-theme-onedark
   - akamud.vscode-theme-onelight
@@ -43,19 +19,6 @@ vscode_extensions:
 
 # Firefox policies. Documented here:
 # https://mozilla.github.io/policy-templates/
-firefox_policies:
-  # Set (and lock) the homepage to the given url
-  # Homepage:
-  #   URL: "http://contest"
-  #   Locked: true
-  #   StartPage: homepage-locked
-  # Add some bookmark entries (and always show the bookmarks toolbar)
-  DisplayBookmarksToolbar: always
-  Bookmarks:
-    - Title: Programming Docs
-      URL: "file:///opt/localwww/index.html"
-      Placement: "toolbar"
-
 firefox_default_policies:
   # Prevent updating (shouldn't happen on linux, but we want to avoid it anyway)
   DisableAppUpdate: true
@@ -69,7 +32,6 @@ firefox_default_policies:
   DisableFeedbackCommands: true
   NewTabPage: false
   NoDefaultBookmarks: true
-  DisableProfileImport: true
 
   # Disable a bunch of messages
   UserMessaging:
@@ -80,3 +42,11 @@ firefox_default_policies:
     SkipOnboard: true
     MoreFromMozilla: false
     Locked: true
+
+mysql_root_password: rootpw
+mysql_user: domjudge
+mysql_password: djpw
+max_connections: 1000
+mysql_database: domserver
+
+auth_token: "1234"

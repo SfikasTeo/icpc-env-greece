@@ -1,6 +1,0 @@
----
-- name: OCaml (~220mb)
-  apt:
-    state: present
-    pkg:
-      - ocaml-nox
