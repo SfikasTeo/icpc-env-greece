@@ -8,16 +8,6 @@
     ansible_python_interpreter: /usr/bin/python3
   tasks:
 
-    - name: copy pam_environment to make sure the proxy is disabled for icpcadmin(and root)
-      copy: src=files/pam_environment dest={{ item }}/.pam_environment
-      with_items:
-        - /root
-        - /home/imageadmin
-
-    - name: copy updated pam sudo config so it reads .pam_environment
-      copy: src=files/pam_sudo dest=/etc/pam.d/sudo
-
-
     - name: disable fsync for dpkg
       copy: dest=/etc/dpkg/dpkg.cfg.d/02-dpkg-no-sync content="force-unsafe-io"
     - name: disable apt cache
@@ -77,18 +67,16 @@
 
     - import_tasks: 'playbooks/gui.yml'
 
+    # VERY IMPORTANT
+    # Do not change the order of domserver and reverseproxy
+    - import_tasks: 'playbooks/domserver.yml'
     - import_tasks: 'playbooks/reverseproxy.yml'
-    - import_tasks: 'playbooks/compilers.yml'
     - import_tasks: 'playbooks/devel_tools.yml'
     - import_tasks: 'playbooks/icpc.yml'
     - import_tasks: 'playbooks/vmtouch.yml'
     - import_tasks: 'playbooks/system.yml'
 
     - import_tasks: 'playbooks/firewall.yaml'
-
-    # Management related things
-    #- import_tasks: 'playbooks/ansible-pull.yml'
-    #- import_tasks: 'playbooks/reversetunnel.yml'
 
     - name: autoremove/autoclean apt
       block:

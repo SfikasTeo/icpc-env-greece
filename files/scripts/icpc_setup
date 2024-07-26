@@ -150,21 +150,21 @@ def main():
     configuration["contest"] = read_file("/icpc/CONTEST", None)
 
     # Initialize our dialog (with network status in the backtitle)
-    print("Waiting up to 30s for network...")
-    network_status = False
-    for i in range(0, 30):
-        if check_network():
-            network_status = True
-            break
-        print(".", end="")
-        time.sleep(1)
+    # print("Waiting up to 30s for network...")
+    network_status = True
+    # for i in range(0, 30):
+    #     if check_network():
+    #         network_status = True
+    #         break
+    #     print(".", end="")
+    #     time.sleep(1)
     w = Whiptail(title="ICPC Setup", backtitle=f"Network status: {'online' if network_status else 'offline'}")
 
     # Print a welcome message! (and record whether they pressed esc or ok)
     welcome_ok = welcome(w)
 
     # prompt to configure Wifi if the network isn't functional and the computer has a wireless interface
-    if not check_network() and len(wifi_interfaces()) > 0:
+    if not network_status and len(wifi_interfaces()) > 0:
         configure_wifi(w)
 
         # Refresh the backtitle with network status now that wifi is configured (hopefully)

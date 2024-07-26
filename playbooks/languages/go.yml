@@ -1,7 +1,0 @@
----
-- name: go
-  apt:
-    state: present
-    pkg:
-      - gccgo
-      - golang

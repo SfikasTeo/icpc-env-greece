@@ -1,0 +1,90 @@
+---
+- name: Update apt package index
+  apt:
+    update_cache: yes
+
+- name: Install required packages
+  apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+
+- name: Create /etc/apt/keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Docker GPG key
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+
+- name: Add Docker repository
+  apt_repository:
+    repo: deb [signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt package index
+  apt:
+    update_cache: yes
+
+- name: Install Docker packages
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+
+- name: Ensure Docker is started and enabled at boot
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Run MariaDB container with specified environment variables
+  docker_container:
+    name: dj-mariadb
+    image: mariadb
+    state: started
+    restart_policy: always
+    ports:
+      - "13306:3306"
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      MYSQL_USER: "{{ mysql_user }}"
+      MYSQL_PASSWORD: "{{ mysql_password }}"
+      MYSQL_DATABASE: "{{ mysql_database }}"
+    command: ["--max-connections={{ max_connections }}"]
+
+
+- name: Run DOMserver container with specified environment variables
+  docker_container:
+    name: domserver
+    image: domjudge/domserver:latest
+    state: started
+    restart_policy: always
+    env:
+      MYSQL_HOST: mariadb
+      MYSQL_USER: "{{ mysql_user }}"
+      MYSQL_DATABASE: "{{ mysql_database }}"
+      MYSQL_PASSWORD: "{{ mysql_password }}"
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+    links:
+      - dj-mariadb:mariadb
+
+- name: Get IP address of domserver container
+  command: docker inspect -f '{% raw %}{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}{% endraw %}' domserver
+  register: domserver_ip_result
+  changed_when: false
+
+- name: Set fact for domserver IP address
+  set_fact:
+    domserver_ip_address: "{{ domserver_ip_result.stdout }}"
+
+

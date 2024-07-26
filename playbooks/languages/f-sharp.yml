@@ -1,6 +1,0 @@
----
-- name: F#
-  apt:
-    state: present
-    pkg:
-      - fsharp

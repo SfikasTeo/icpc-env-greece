@@ -1,6 +1,0 @@
----
-- name: D
-  apt:
-    state: present
-    pkg:
-      - gdc

@@ -5,14 +5,6 @@
 - name: copy icpc scripts
   copy: src=files/scripts dest=/icpc mode=0755
 
-- name: add a supported_languages file
-  copy:
-    dest: /icpc/supported_languages
-    content: |
-      {% for l in languages %}
-      {{ l }}
-      {% endfor %}
-
 
 - name: write out the contest id (if specified)
   copy:
@@ -20,8 +12,8 @@
     content: "{{ contest_id }}"
   when: contest_id|default('')|length > 0
 
-- name: create printfile symlink(to match world finals image)
-  file: src=/icpc/scripts/pcpr dest=/icpc/scripts/printfile state=link
+# - name: create printfile symlink(to match world finals image)
+#   file: src=/icpc/scripts/pcpr dest=/icpc/scripts/printfile state=link
 
 - name: set default papersize to letter
   copy: dest=/etc/papersize content="letter\n" mode=0644
@@ -62,10 +54,10 @@
 - name: stop/disable cups-browsed from autodiscovering printers
   service: name=cups-browsed state=stopped enabled=no
 
-- name: copy icpc default wallpaper
-  copy: dest=/icpc/wallpaper.png src=files/wallpaper.png
-- name: Copy autostart desktop entry to set wallpaper
-  copy: src=files/icpc_autostart.desktop dest=/etc/xdg/autostart/icpc_autostart.desktop
+# - name: copy icpc default wallpaper
+  # copy: dest=/icpc/wallpaper.png src=files/wallpaper.png
+# - name: Copy autostart desktop entry to set wallpaper
+  # copy: src=files/icpc_autostart.desktop dest=/etc/xdg/autostart/icpc_autostart.desktop
 
 - name: create icpcadmin group
   group: name='icpcadmin' state='present'
@@ -134,12 +126,6 @@
       [user]
       	email = icpcadmin@icpcenv
       	name = icpcenv
-
-- name: disable proxy for icpcadmin
-  copy: src=files/pam_environment dest=/home/icpcadmin/.pam_environment
-
-- name: use polkit to disable mounting anything
-  copy: src=files/99-deny-polkit-mount.pkla dest=/etc/polkit-1/localauthority/50-local.d/disable-mount.pkla mode=0644 owner=root group=root
 
 - name: create team reset group
   group: name='teamreset' state='present'
