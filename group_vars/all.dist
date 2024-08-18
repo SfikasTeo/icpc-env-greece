@@ -7,6 +7,9 @@ icpc_timezone: 'Europe/Athens'
 # That has access to the contest server.
 icpcadmin_pass: icpcadmin
 
+#The auth token that is used to allow traffic to the server
+auth_token: "1234"
+
 #This is fine as long as we understand how the languages are beeing set up.
 # Check the java version that is beeing downloaded
 languages:
