@@ -42,6 +42,7 @@ cd icpc-env-greece
   * Install required packages
     ```bash
     sudo apt-get install qemu-system-x86 genisoimage bsdtar ansible # Debian based Distros
+    sudo apt-get install qemu-system-x86 genisoimage ansible libarchive-tools # Debian based Distros without bsdtar
     sudo pacman -S qemu-system-x86 cdrtools libarchive ansible # Arch Based Distros
     ```
   * Download the 64 bit version of Ubuntu 20.04.6 Server inside the cloned directory:
