@@ -51,3 +51,13 @@
   docker_image:
     name: domjudge/judgehost:latest
     source: pull
+
+- name: Force cgroup v1
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash cgroup_enable=memory swapaccount=1 systemd.unified_cgroup_hierarchy=0 biosdevname=0 consoleblank=0 net.ifnames=0"'
+    backup: yes
+
+- name: Update GRUB configuration
+  command: update-grub
