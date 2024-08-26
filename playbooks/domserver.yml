@@ -51,7 +51,7 @@
   docker_image:
     name: domjudge/judgehost:latest
     source: pull
-
+    
 - name: Force cgroup v1
   lineinfile:
     path: /etc/default/grub
@@ -61,3 +61,15 @@
 
 - name: Update GRUB configuration
   command: update-grub
+
+- name: Copy Judgehosts shell script
+  copy:
+    src: files/runJudgehosts.sh
+    dest: /home/contestant/Desktop/runJudgehosts.sh
+    mode: '0755'
+
+- name: Copy startAllContainers shell script
+  copy:
+    src: files/startAllContainers.sh
+    dest: /home/contestant/Desktop/startAllContainers.sh
+    mode: '0755'
