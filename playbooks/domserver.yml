@@ -46,3 +46,8 @@
     name: docker
     enabled: yes
     state: started
+
+- name: Pull domjudge image
+  docker_image:
+    name: domjudge/judgehost:latest
+    source: pull
