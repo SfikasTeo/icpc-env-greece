@@ -88,11 +88,11 @@
     domserver_ip_address: "{{ domserver_ip_result.stdout }}"
 
 - name: Retrieve Admin Password
-  command: docker exec -it domserver cat /opt/domjudge/domserver/etc/initial_admin_password.secret
+  command: docker exec -it domserver awk {print $NF} /opt/domjudge/domserver/etc/initial_admin_password.secret | tail -n -1
   register: admin_password_result
 
 - name: Retrieve Judgehost Password
-  command: docker exec -it domserver cat /opt/domjudge/domserver/etc/restapi.secret
+  command: docker exec -it domserver awk {print $NF} /opt/domjudge/domserver/etc/restapi.secret | tail -n -1
   register: judgehost_password_result
 
 - name: Create passwords.txt file
