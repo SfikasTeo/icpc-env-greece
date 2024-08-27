@@ -87,4 +87,17 @@
   set_fact:
     domserver_ip_address: "{{ domserver_ip_result.stdout }}"
 
+- name: Retrieve Admin Password
+  command: docker exec -it domserver cat /opt/domjudge/domserver/etc/initial_admin_password.secret
+  register: admin_password_result
 
+- name: Retrieve Judgehost Password
+  command: docker exec -it domserver cat /opt/domjudge/domserver/etc/restapi.secret
+  register: judgehost_password_result
+
+- name: Create passwords.txt file
+  copy:
+    content: |
+      Admin_Password: {{ admin_password_result.stdout | trim }}
+      Judgehost_Password: {{ judgehost_password_result.stdout | trim }}
+    dest: /home/contestant/Desktop/passwords.txt
