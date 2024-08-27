@@ -15,6 +15,12 @@ server {
             break;
         }
 
+        # Check Authorization header for judgehost requests
+        if ($http_authorization = "Basic {{ judgehost_auth_token }}") {
+            proxy_pass http://{{ domserver_ip_address }};
+            break;
+        }
+
         # Return 401 Unauthorized if the authorization fails
         return 401;
     }

@@ -101,3 +101,11 @@
       Admin_Password: {{ admin_password_result.stdout | trim }}
       Judgehost_Password: {{ judgehost_password_result.stdout | trim }}
     dest: /home/contestant/Desktop/passwords.txt
+
+- name: Base64 encode judgehost password
+  command: printf '%s' 'judgehost:{{ judgehost_password_result.stdout | trim }}' | base64
+  register: judgehost_password_base64
+
+- name: Set fact for judgehost password
+  set_fact:
+    judgehost_auth_token: "{{ judgehost_password_base64.stdout }}"
