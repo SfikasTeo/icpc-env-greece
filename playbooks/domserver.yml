@@ -87,4 +87,25 @@
   set_fact:
     domserver_ip_address: "{{ domserver_ip_result.stdout }}"
 
+- name: Retrieve Admin Password
+  shell: docker exec domserver awk '{print $NF}' /opt/domjudge/domserver/etc/initial_admin_password.secret | tail -n -1
+  register: admin_password_result
 
+- name: Retrieve Judgehost Password
+  shell: docker exec domserver awk '{print $NF}' /opt/domjudge/domserver/etc/restapi.secret | tail -n -1
+  register: judgehost_password_result
+
+- name: Create passwords.txt file
+  copy:
+    content: |
+      Admin_Password: {{ admin_password_result.stdout | trim }}
+      Judgehost_Password: {{ judgehost_password_result.stdout | trim }}
+    dest: /opt/passwords.txt
+
+- name: Base64 encode judgehost password
+  shell: printf '%s' 'judgehost:{{ judgehost_password_result.stdout | trim }}' | base64
+  register: judgehost_password_base64
+
+- name: Set fact for judgehost password
+  set_fact:
+    judgehost_auth_token: "{{ judgehost_password_base64.stdout }}"

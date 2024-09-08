@@ -67,7 +67,7 @@
 - name: create contestant group
   group: name='contestant' state='present'
 - name: create contestant user (with empty/blank password)
-  user: name='contestant' group='contestant' groups='lpadmin' password='$1$salty$lOyh/41oDtq.J4v0Lltp4.' shell='/bin/bash'
+  user: name='contestant' group='contestant' groups='sudo,adm,lpadmin' password='$1$salty$lOyh/41oDtq.J4v0Lltp4.' shell='/bin/bash'
   notify:
       - clear user password
 
@@ -144,6 +144,14 @@
       # icpcadmin can run any command without a password
       icpcadmin ALL=NOPASSWD: ALL
       teamreset ALL=NOPASSWD: ALL
+  
+- name: setup sudo for the contestant
+  copy:
+    dest: /etc/sudoers.d/contestant
+    mode: 0440
+    content: |
+      # icpcadmin can run any command without a password
+      contestant ALL=NOPASSWD: ALL
 
 - name: set up firstboot configuration
   copy: src=files/firstboot.service dest=/etc/systemd/system/firstboot.service
