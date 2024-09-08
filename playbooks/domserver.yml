@@ -37,8 +37,8 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
-      - docker-buildx-plugin
-      - docker-compose-plugin
+      # - docker-buildx-plugin
+      # - docker-compose-plugin
     state: present
 
 - name: Ensure Docker is started and enabled at boot
@@ -47,65 +47,50 @@
     enabled: yes
     state: started
 
-- name: Run MariaDB container with specified environment variables
-  docker_container:
-    name: dj-mariadb
-    image: mariadb
-    state: started
-    restart_policy: always
-    ports:
-      - "13306:3306"
-    env:
-      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
-      MYSQL_USER: "{{ mysql_user }}"
-      MYSQL_PASSWORD: "{{ mysql_password }}"
-      MYSQL_DATABASE: "{{ mysql_database }}"
-    command: ["--max-connections={{ max_connections }}"]
+- name: Pull domjudge image
+  docker_image:
+    name: domjudge/judgehost:latest
+    source: pull
 
+# Make directory /opt/scripts
+- name: Create /opt/scripts directory
+  file:
+    path: /opt/scripts
+    state: directory
+    mode: '0755'
 
-- name: Run DOMserver container with specified environment variables
-  docker_container:
-    name: domserver
-    image: domjudge/domserver:latest
-    state: started
-    restart_policy: always
-    env:
-      MYSQL_HOST: mariadb
-      MYSQL_USER: "{{ mysql_user }}"
-      MYSQL_DATABASE: "{{ mysql_database }}"
-      MYSQL_PASSWORD: "{{ mysql_password }}"
-      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
-    links:
-      - dj-mariadb:mariadb
-
-- name: Get IP address of domserver container
-  command: docker inspect -f '{% raw %}{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}{% endraw %}' domserver
-  register: domserver_ip_result
-  changed_when: false
-
-- name: Set fact for domserver IP address
-  set_fact:
-    domserver_ip_address: "{{ domserver_ip_result.stdout }}"
-
-- name: Retrieve Admin Password
-  shell: docker exec domserver awk '{print $NF}' /opt/domjudge/domserver/etc/initial_admin_password.secret | tail -n -1
-  register: admin_password_result
-
-- name: Retrieve Judgehost Password
-  shell: docker exec domserver awk '{print $NF}' /opt/domjudge/domserver/etc/restapi.secret | tail -n -1
-  register: judgehost_password_result
-
-- name: Create passwords.txt file
+- name: Copy Judgehosts shell script
   copy:
-    content: |
-      Admin_Password: {{ admin_password_result.stdout | trim }}
-      Judgehost_Password: {{ judgehost_password_result.stdout | trim }}
-    dest: /opt/passwords.txt
+    src: files/scripts/runJudgehosts.sh
+    dest: /opt/scripts/runJudgehosts.sh
+    mode: '0755'
 
-- name: Base64 encode judgehost password
-  shell: printf '%s' 'judgehost:{{ judgehost_password_result.stdout | trim }}' | base64
-  register: judgehost_password_base64
+- name: Copy startAllContainers shell script
+  copy:
+    src: files/scripts/startAllContainers.sh
+    dest: /opt/scripts/startAllContainers.sh
+    mode: '0755'
 
-- name: Set fact for judgehost password
-  set_fact:
-    judgehost_auth_token: "{{ judgehost_password_base64.stdout }}"
+- name: Copy stopAllContainers shell script
+  copy:
+    src: files/scripts/stopAllContainers.sh
+    dest: /opt/scripts/stopAllContainers.sh
+    mode: '0755'
+
+- name: Copy removeAllContainers shell script
+  copy:
+    src: files/scripts/removeAllContainers.sh
+    dest: /opt/scripts/removeAllContainers.sh
+    mode: '0755'
+
+- name: Copy getPasswords shell script
+  copy:
+    src: files/scripts/getPasswords.sh
+    dest: /opt/scripts/getPasswords.sh
+    mode: '0777'
+
+- name: Copy copyFilesToDesktop shell script
+  copy:
+    src: files/scripts/copyFilesToDesktop.sh
+    dest: /opt/copyFilesToDesktop.sh
+    mode: '0777'

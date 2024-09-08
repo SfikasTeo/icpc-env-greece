@@ -4,7 +4,7 @@
     pkg:
       - ufw
 
-- name: Enable ufw service
-  ufw: state=enabled logging=off 
-- name: Execute firewall script
-  command: /icpc/scripts/firewall.sh
+# - name: Enable ufw service
+#   ufw: state=enabled logging=off 
+# - name: Execute firewall script
+#   command: /icpc/scripts/firewall.sh
