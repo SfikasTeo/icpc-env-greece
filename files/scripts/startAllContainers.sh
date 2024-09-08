@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check for any stopped containers
-stopped_containers=$(docker ps -a -q -f status=exited)
+stopped_containers=$(docker ps -a -f status=exited -f status=created --format "{{.Names}}" | sort)
 
 if [ -z "$stopped_containers" ]; then
     echo "No stopped containers found."

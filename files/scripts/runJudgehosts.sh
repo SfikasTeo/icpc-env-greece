@@ -19,15 +19,12 @@ CONTAINER_COUNT=$((NUM_PROCESSORS - 1))
 # Loop to run Docker containers equal to the number of processors minus one
 for i in $(seq 0 $((CONTAINER_COUNT - 1)))
 do
-    docker run -it --privileged \
+    docker create --privileged \
         --name judgehost-$i \
         --hostname $HOSTNAME \
         -e DAEMON_ID=$i \
         -e CONTAINER_TIMEZONE=Europe/Athens \
         -e DOMSERVER_BASEURL=http://$DOMSERVER_IP:$DOMSERVER_PORT/ \
         -e JUDGEDAEMON_PASSWORD=$JUDGEDAEMON_PASSWORD \
-        domjudge/judgehost:latest &
+        domjudge/judgehost:latest
 done
-
-# Wait for all background jobs to finish
-wait

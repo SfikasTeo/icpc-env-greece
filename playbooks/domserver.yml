@@ -37,8 +37,8 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
-      - docker-buildx-plugin
-      - docker-compose-plugin
+      # - docker-buildx-plugin
+      # - docker-compose-plugin
     state: present
 
 - name: Ensure Docker is started and enabled at boot
@@ -51,25 +51,46 @@
   docker_image:
     name: domjudge/judgehost:latest
     source: pull
-    
-- name: Force cgroup v1
-  lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash cgroup_enable=memory swapaccount=1 systemd.unified_cgroup_hierarchy=0 biosdevname=0 consoleblank=0 net.ifnames=0"'
-    backup: yes
 
-- name: Update GRUB configuration
-  command: update-grub
+# Make directory /opt/scripts
+- name: Create /opt/scripts directory
+  file:
+    path: /opt/scripts
+    state: directory
+    mode: '0755'
 
 - name: Copy Judgehosts shell script
   copy:
-    src: files/runJudgehosts.sh
-    dest: /home/contestant/Desktop/runJudgehosts.sh
+    src: files/scripts/runJudgehosts.sh
+    dest: /opt/scripts/runJudgehosts.sh
     mode: '0755'
 
 - name: Copy startAllContainers shell script
   copy:
-    src: files/startAllContainers.sh
-    dest: /home/contestant/Desktop/startAllContainers.sh
+    src: files/scripts/startAllContainers.sh
+    dest: /opt/scripts/startAllContainers.sh
     mode: '0755'
+
+- name: Copy stopAllContainers shell script
+  copy:
+    src: files/scripts/stopAllContainers.sh
+    dest: /opt/scripts/stopAllContainers.sh
+    mode: '0755'
+
+- name: Copy removeAllContainers shell script
+  copy:
+    src: files/scripts/removeAllContainers.sh
+    dest: /opt/scripts/removeAllContainers.sh
+    mode: '0755'
+
+- name: Copy getPasswords shell script
+  copy:
+    src: files/scripts/getPasswords.sh
+    dest: /opt/scripts/getPasswords.sh
+    mode: '0777'
+
+- name: Copy copyFilesToDesktop shell script
+  copy:
+    src: files/scripts/copyFilesToDesktop.sh
+    dest: /opt/copyFilesToDesktop.sh
+    mode: '0777'
